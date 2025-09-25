@@ -3,16 +3,26 @@ package com.anonymous.algashop.ordering;
 import com.anonymous.algashop.ordering.domain.entity.Customer;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 class CustomerTest {
 
     @Test
     void testingCustomer() {
-        Customer customer = new Customer();
-        customer.setId(UUID.randomUUID());
-        customer.setFullName("Carlos Eduardo");
-        customer.setDocument("1234");
-        customer.setLoyaltyPoints(10);
+        Customer customer = new Customer(
+                UUID.randomUUID(),
+                "John Doe",
+                LocalDate.of(1991, 7, 5),
+                "johndoe@gmail.com",
+                "478-256-2504",
+                "255-08-0578",
+                true,
+                OffsetDateTime.now()
+        );
+
+        customer.addLoyaltyPoints(10);
+
     }
 }

@@ -13,10 +13,6 @@ import java.util.Set;
 
 class OrderTest {
 
-    @Test
-    void shouldGenerate() {
-        Order order = Order.draft(new CustomerId());
-    }
 
     @Test
     void shouldAddItem() {
@@ -35,17 +31,17 @@ class OrderTest {
         OrderItem orderItem = order.items().iterator().next();
 
         Assertions.assertWith(orderItem,
-                (i) -> Assertions.assertThat(i.id()).isNotNull(),
-                (i) -> Assertions.assertThat(i.productName()).isEqualTo(new ProductName("Mouse pad")),
-                (i) -> Assertions.assertThat(i.productId()).isEqualTo(productId),
-                (i) -> Assertions.assertThat(i.price()).isEqualTo(new Money("100")),
-                (i) -> Assertions.assertThat(i.quantity()).isEqualTo(new Quantity(1))
+                i -> Assertions.assertThat(i.id()).isNotNull(),
+                i -> Assertions.assertThat(i.productName()).isEqualTo(new ProductName("Mouse pad")),
+                i -> Assertions.assertThat(i.productId()).isEqualTo(productId),
+                i -> Assertions.assertThat(i.price()).isEqualTo(new Money("100")),
+                i -> Assertions.assertThat(i.quantity()).isEqualTo(new Quantity(1))
                 );
 
     }
 
     @Test
-    public void shouldGenerateExceptionWhenTryToChangeItemSet() {
+    void shouldGenerateExceptionWhenTryToChangeItemSet() {
         Order order = Order.draft(new CustomerId());
         ProductId productId = new ProductId();
 
@@ -61,5 +57,30 @@ class OrderTest {
         Assertions.assertThatExceptionOfType(UnsupportedOperationException.class)
                 .isThrownBy(items::clear);
     }
+
+    @Test
+    void shouldCalculateTotals() {
+        Order order = Order.draft(new CustomerId());
+        ProductId productId = new ProductId();
+
+        order.addItem(
+                productId,
+                new ProductName("Mouse pad"),
+                new Money("100"),
+                new Quantity(2)
+        );
+
+        order.addItem(
+                productId,
+                new ProductName("RAM Memory"),
+                new Money("50"),
+                new Quantity(1)
+        );
+
+        Assertions.assertThat(order.totalAmount()).isEqualTo(new Money("250"));
+        Assertions.assertThat(order.totalItems()).isEqualTo(new Quantity(3));
+    }
+
+
 
 }

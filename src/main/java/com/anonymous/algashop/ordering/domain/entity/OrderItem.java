@@ -53,6 +53,13 @@ public class OrderItem {
         return orderItem;
     }
 
+    //this method only can be used by Order.  Therefore, we are using package private in this case
+    void changeQuantity(Quantity quantity) {
+        Objects.requireNonNull(quantity);
+        this.setQuantity(quantity);
+        this.recalculateTotals();
+    }
+
     public OrderItemId id() {
         return id;
     }
@@ -84,6 +91,7 @@ public class OrderItem {
     private void recalculateTotals() {
         this.setTotalAmount(this.price().multiply(this.quantity()));
     }
+
 
     private void setId(OrderItemId id) {
         Objects.requireNonNull(id);
@@ -131,4 +139,6 @@ public class OrderItem {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
+
 }

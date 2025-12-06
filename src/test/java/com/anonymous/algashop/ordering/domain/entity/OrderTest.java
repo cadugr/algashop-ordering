@@ -18,6 +18,31 @@ class OrderTest {
 
 
     @Test
+    void shouldGenerateDraftOrder() {
+        CustomerId customerId = new CustomerId();
+        Order order = Order.draft(customerId);
+
+        Assertions.assertWith(order
+                , o -> Assertions.assertThat(o.id()).isNotNull()
+                , o -> Assertions.assertThat(o.customerId()).isEqualTo(customerId)
+                , o -> Assertions.assertThat(o.status()).isEqualTo(OrderStatus.DRAFT)
+                , o -> Assertions.assertThat(o.items()).isEmpty()
+                , o -> Assertions.assertThat(o.totalAmount()).isEqualTo(Money.ZERO)
+                , o -> Assertions.assertThat(o.totalItems()).isEqualTo(Quantity.ZERO),
+
+                o -> Assertions.assertThat(o.placedAt()).isNull(),
+                o -> Assertions.assertThat(o.paidAt()).isNull(),
+                o -> Assertions.assertThat(o.canceledAt()).isNull(),
+                o -> Assertions.assertThat(o.readyAt()).isNull(),
+                o -> Assertions.assertThat(o.billing()).isNull(),
+                o -> Assertions.assertThat(o.shipping()).isNull(),
+                o -> Assertions.assertThat(o.paymentMethod()).isNull()
+        );
+
+
+    }
+
+    @Test
     void shouldAddItem() {
         Order order = Order.draft(new CustomerId());
         Product product = ProductTestDataBuilder.aProductAltMousePad().build();
@@ -55,7 +80,6 @@ class OrderTest {
     @Test
     void shouldCalculateTotals() {
         Order order = Order.draft(new CustomerId());
-        ProductId productId = new ProductId();
 
         order.addItem(
                 ProductTestDataBuilder.aProductAltMousePad().build(),

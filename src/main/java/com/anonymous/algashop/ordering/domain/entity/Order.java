@@ -1,9 +1,6 @@
 package com.anonymous.algashop.ordering.domain.entity;
 
-import com.anonymous.algashop.ordering.domain.exceptions.OrderCannotBePlacedException;
-import com.anonymous.algashop.ordering.domain.exceptions.OrderDoesNotContainOrderItemException;
-import com.anonymous.algashop.ordering.domain.exceptions.OrderInvalidShippingDeliveryDateException;
-import com.anonymous.algashop.ordering.domain.exceptions.OrderStatusCannotBeChangedException;
+import com.anonymous.algashop.ordering.domain.exceptions.*;
 import com.anonymous.algashop.ordering.domain.valueobject.*;
 import com.anonymous.algashop.ordering.domain.valueobject.id.CustomerId;
 import com.anonymous.algashop.ordering.domain.valueobject.id.OrderId;
@@ -84,6 +81,7 @@ public class Order {
         Objects.requireNonNull(product);
         Objects.requireNonNull(quantity);
 
+        this.verifyIfChangeable();
         product.checkOutOfStock();
 
         OrderItem orderItem = OrderItem.brandNew()
@@ -114,16 +112,20 @@ public class Order {
 
     public void changePaymentMethod(PaymentMethod paymentMethod) {
         Objects.requireNonNull(paymentMethod);
+        this.verifyIfChangeable();
         this.setPaymentMethod(paymentMethod);
     }
 
     public void changeBilling(Billing billing) {
         Objects.requireNonNull(billing);
+        this.verifyIfChangeable();
         this.setBilling(billing);
     }
 
     public void changeShipping(Shipping newShipping) {
         Objects.requireNonNull(newShipping);
+
+        this.verifyIfChangeable();
 
         if (newShipping.expectedDate().isBefore(LocalDate.now())) {
             throw new OrderInvalidShippingDeliveryDateException(this.id());
@@ -135,6 +137,8 @@ public class Order {
     public void changeItemQuantity(OrderItemId orderItemId, Quantity quantity) {
         Objects.requireNonNull(orderItemId);
         Objects.requireNonNull(quantity);
+
+        this.verifyIfChangeable();
 
         OrderItem orderItem = this.findOrderItem(orderItemId);
         orderItem.changeQuantity(quantity);
@@ -204,6 +208,12 @@ public class Order {
 
     public Set<OrderItem> items() {
         return Collections.unmodifiableSet(this.items);
+    }
+
+    private void verifyIfChangeable() {
+        if (!this.isDraft()) {
+           throw new OrderCannotBeEditedException(this.id(), this.status());
+        }
     }
 
     private void recalculateTotals() {

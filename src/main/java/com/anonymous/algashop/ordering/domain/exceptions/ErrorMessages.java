@@ -2,6 +2,8 @@ package com.anonymous.algashop.ordering.domain.exceptions;
 
 public class ErrorMessages {
 
+    private ErrorMessages() {}
+
     public static final String VALIDATION_ERROR_EMAIL_IS_INVALID = "Email is invalid";
     public static final String VALIDATION_ERROR_BIRTHDATE_MUST_IN_PAST = "BirthDate must be a past date";
     public static final String VALIDATION_ERROR_FULLNAME_IS_NULL = "FullName cannot be null";
@@ -27,4 +29,6 @@ public class ErrorMessages {
     public static final String ERROR_ORDER_DOES_NOT_CONTAIN_ITEM =
             "Order %s does not contain item %s";
     public static final String ERROR_PRODUCT_IS_OUT_OF_STOCK = "Product %s is out of stock";
+
+    public static final String ERROR_ORDER_CANNOT_BE_EDITED = "Order %s with status %s cannot be edited";
 }

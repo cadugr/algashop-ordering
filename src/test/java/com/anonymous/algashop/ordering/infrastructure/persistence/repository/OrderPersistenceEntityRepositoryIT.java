@@ -1,0 +1,14 @@
+package com.anonymous.algashop.ordering.infrastructure.persistence.repository;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class OrderPersistenceEntityRepositoryIT {
+
+    @Test
+    void shouldRun() {
+
+    }
+
+}

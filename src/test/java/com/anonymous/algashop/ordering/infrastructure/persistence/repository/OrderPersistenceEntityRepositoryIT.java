@@ -1,6 +1,7 @@
 package com.anonymous.algashop.ordering.infrastructure.persistence.repository;
 
 import com.anonymous.algashop.ordering.infrastructure.persistence.config.SpringDataAuditingConfig;
+import com.anonymous.algashop.ordering.infrastructure.persistence.entity.OrderItemPersistenceEntity;
 import com.anonymous.algashop.ordering.infrastructure.persistence.entity.OrderPersistenceEntity;
 import com.anonymous.algashop.ordering.infrastructure.persistence.entity.OrderPersistenceEntityTestDataBuilder;
 import org.assertj.core.api.Assertions;
@@ -28,6 +29,10 @@ class OrderPersistenceEntityRepositoryIT {
 
         orderPersistenceEntityRepository.saveAndFlush(entity);
         Assertions.assertThat(orderPersistenceEntityRepository.existsById(entity.getId())).isTrue();
+
+        OrderPersistenceEntity savedEntity = orderPersistenceEntityRepository.findById(entity.getId()).orElseThrow();
+
+        Assertions.assertThat(savedEntity.getItems()).isNotEmpty();
     }
 
     @Test

@@ -87,7 +87,7 @@ public class OrderPersistenceEntity {
     private ShippingEmbeddable shipping;
 
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private Set<OrderItemPersistenceEntity> items = new HashSet<>();
 
     @Builder

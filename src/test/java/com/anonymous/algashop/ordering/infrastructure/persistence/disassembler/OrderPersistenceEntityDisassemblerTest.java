@@ -19,7 +19,7 @@ class OrderPersistenceEntityDisassemblerTest {
     private final OrderPersistenceEntityDisassembler disassembler = new OrderPersistenceEntityDisassembler();
 
     @Test
-    void shouldConvertFromPersistence() {
+    public void shouldConvertFromPersistence() {
         OrderPersistenceEntity persistenceEntity = OrderPersistenceEntityTestDataBuilder.existingOrder().build();
         Order domainEntity = disassembler.toDomainEntity(persistenceEntity);
         assertThat(domainEntity).satisfies(
@@ -32,7 +32,8 @@ class OrderPersistenceEntityDisassemblerTest {
                 s -> assertThat(s.canceledAt()).isEqualTo(persistenceEntity.getCanceledAt()),
                 s -> assertThat(s.readyAt()).isEqualTo(persistenceEntity.getReadyAt()),
                 s -> assertThat(s.status()).isEqualTo(OrderStatus.valueOf(persistenceEntity.getStatus())),
-                s -> assertThat(s.paymentMethod()).isEqualTo(PaymentMethod.valueOf(persistenceEntity.getPaymentMethod()))
+                s -> assertThat(s.paymentMethod()).isEqualTo(PaymentMethod.valueOf(persistenceEntity.getPaymentMethod())),
+                s -> assertThat(s.items().size()).isEqualTo(persistenceEntity.getItems().size())
         );
     }
 
